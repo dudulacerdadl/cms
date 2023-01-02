@@ -1,16 +1,23 @@
 <?php
 
-$host     = "mysql";
-$dbname   = "cms";
-$username = "root";
-$password = "";
+require_once './db/connection.php';
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $data = $conn->query('SELECT * FROM `notices`');
-} catch (PDOException $pe) {
-    die("Não foi possível se conectar ao banco de dados $dbname :" . $pe->getMessage());
+if (!defined('ROOT')) {
+    define('ROOT', dirname(__DIR__));
 }
+
+session_start();
+$data = $conn->query('SELECT * FROM `notices`');
+
+/**
+ * TODO
+ *
+ * [ ] Implementar sistema de Rotas (https: //alexandrebbarbosa.wordpress.com/2019/04/17/phpconstruir-um-sistema-de-rotas-para-mvc-primeira-parte/);
+ * [ ] Implementar cadastro de notícias;
+ * [ ] Implementar comentários por usuários;
+ * [ ] Aprimorar o sistema de templates usando rotas;
+ * [ ] Implementar renderização do conteúdo de cada página de notícia;
+ */
 
 ?>
 
@@ -27,19 +34,11 @@ try {
     <title>Início</title>
 </head>
 <body>
-    <header>
-        <img src="./imgs/logo.png" alt="cms" class="logo-header">
-
-        <h1 class="page-title">CMS - Sistema de Gerenciamento de Conteúdo</h1>
-
-        <section class="login-section">
-            
-        </section>
-    </header>
+    <? require_once './template/header.php'; ?>
 
     <main>
         <? foreach ($data as $row): ?>
-        <a class="card-link" href="./content.php" rel="noopener noreferrer">
+        <a class="card-link" href="./views/content.php" rel="noopener noreferrer">
             <div class="card-notice">
                 <img class="cart-img" src="./imgs/notices/img-1.png" alt="pinguins">
                 <div class="card-texts">
@@ -53,10 +52,6 @@ try {
         <? endforeach ?>
     </main>
 
-    <footer>
-        <p>Contato: (4x) 9 xxxx-xxxx</p>
-        <p>E-mail: xxxx@gmail.com</p>
-        <p>Desenvolvido por: Dudu Lacerda</p>
-    </footer>
+    <? require_once './template/footer.php'; ?>
 </body>
 </html>
