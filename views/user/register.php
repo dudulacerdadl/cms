@@ -43,4 +43,5 @@ $results = $result->fetch();
 $_SESSION['id']    = $results['id'];
 $_SESSION['email'] = $results['email'];
 $_SESSION['name']  = $results['name'];
+$_SESSION['password']  = $results['password'];
 header("Location: home.php");

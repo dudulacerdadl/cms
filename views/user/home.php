@@ -15,7 +15,7 @@ session_start();
     <link rel="stylesheet" href="../../style/header.css">
     <link rel="stylesheet" href="../../style/footer.css">
     <link rel="shortcut icon" href="../../imgs/logo.png" type="image/x-icon"/>
-    <title>Login</title>
+    <title>Home</title>
 </head>
 <body>
     <? require_once '../../template/header.php'; ?>
@@ -25,6 +25,7 @@ session_start();
             <img src="../../imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <p>Olá <? echo $_SESSION['name'] ?>, Bem-Vindo!</p>
+        <a href="./edit.php">Editar</a>
         <a href="./signout.php">Sair</a>
     </main>
 

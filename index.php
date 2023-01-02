@@ -12,6 +12,7 @@ $data = $conn->query('SELECT * FROM `notices`');
 /**
  * TODO
  *
+ * [ ] Corrigir processo de edição de usuário cadastrado;
  * [ ] Implementar sistema de Rotas (https: //alexandrebbarbosa.wordpress.com/2019/04/17/phpconstruir-um-sistema-de-rotas-para-mvc-primeira-parte/);
  * [ ] Implementar cadastro de notícias;
  * [ ] Implementar comentários por usuários;
