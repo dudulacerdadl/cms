@@ -5,6 +5,8 @@
 }
 
 footer {
+    width: 100vw;
+    height: 15vh;
     background-color: #3778C6;
     text-align: center;
 }

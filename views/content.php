@@ -4,26 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style/header.css">
-    <link rel="stylesheet" href="./style/notices.css">
-    <link rel="stylesheet" href="./style/footer.css">
+    <link rel="stylesheet" href="../style/header.css">
+    <link rel="stylesheet" href="../style/notices.css">
+    <link rel="stylesheet" href="../style/footer.css">
     <link rel="shortcut icon" href="./imgs/logo.png" type="image/x-icon"/>
     <title>Conteúdo</title>
 </head>
 <body>
-    <header>
-        <img src="./imgs/logo.png" alt="cms" class="logo-header">
-
-        <h1 class="page-title">CMS - Sistema de Gerenciamento de Conteúdo</h1>
-
-        <section class="login-section">
-
-        </section>
-    </header>
+    <? require_once '../template/header.php'; ?>
 
     <main>
         <a class="back-img" href="javascript:history.back()">
-            <img src="./imgs/icons/back.png" width="50px" alt="voltar">
+            <img src="../imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <div class="notices">
             <h1 class="notice-title">Título</h1>
@@ -37,10 +29,6 @@
         </div>
     </main>
 
-    <footer>
-        <p>Contato: (4x) 9 xxxx-xxxx</p>
-        <p>E-mail: xxxx@gmail.com</p>
-        <p>Desenvolvido por: Dudu Lacerda</p>
-    </footer>
+    <? require_once '../template/footer.php'; ?>
 </body>
 </html>
