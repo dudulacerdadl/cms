@@ -8,22 +8,22 @@
     <link rel="stylesheet" href="../../style/login.css">
     <link rel="stylesheet" href="../../style/header.css">
     <link rel="stylesheet" href="../../style/footer.css">
-    <link rel="shortcut icon" href="../imgs/logo.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="../Resource/imgs/logo.png" type="image/x-icon"/>
     <title>Registrar Notícia</title>
 </head>
 <body>
     <main>
         <a class="back-img" href="javascript:history.back()">
-            <img src="../../imgs/icons/back.png" width="50px" alt="voltar">
+            <img src="../../Resource/imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <div class="login-card">
             <div class="login-content">
                 <?
-                if (isset($_SESSION['msg'])) {
-                    echo $_SESSION['msg'];
-                    unset($_SESSION['msg']);
-                }
-                ?>
+if (isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+?>
                 <form class="notice-form" action="../../Model/Notice.php" method="POST">
                     <input type="text" placeholder="Título" name="title" id="title">
                     <input type="text" placeholder="Autor" name="author" id="author">

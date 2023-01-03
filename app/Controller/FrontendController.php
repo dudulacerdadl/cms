@@ -1,15 +1,17 @@
 <?php
 
-namespace Controller;
+namespace Cms\Controller;
 
-use Model\Connection;
+use Cms\Model\Connection;
+
+session_start();
 
 class FrontendController
 {
     /**
      * @var array
      */
-    private $_notices = [];
+    private $notices = [];
 
     public function indexAction()
     {
@@ -19,9 +21,9 @@ class FrontendController
 
         $this->setNotices($data->fetchAll());
 
-        include_once ROOT . "/View/Template/header.php";
-        include_once ROOT . "/View/index.php";
-        include_once ROOT . "/View/Template/footer.php";
+        include_once ROOT . "/app/View/Template/header.php";
+        include_once ROOT . "/app/View/index.php";
+        include_once ROOT . "/app/View/Template/footer.php";
     }
 
     /**
@@ -29,7 +31,7 @@ class FrontendController
      */
     public function getNotices()
     {
-        return $this->_notices;
+        return $this->notices;
     }
 
     /**
@@ -38,7 +40,7 @@ class FrontendController
      */
     public function setNotices($notices)
     {
-        $this->_notices = $notices;
+        $this->notices = $notices;
         return $this;
     }
 }

@@ -1,36 +1,39 @@
 <?php
 
-namespace Controller;
-use Model\Client;
+namespace Cms\Controller;
+
+use Cms\Model\Client;
+
+session_start();
 
 class BackendController
 {
     public function profileAction()
     {
-        include_once ROOT . "/View/Template/header.php";
-        include_once ROOT . "/View/User/profile.php";
-        include_once ROOT . "/View/Template/footer.php";
+        include_once ROOT . "/app/View/Template/header.php";
+        include_once ROOT . "/app/View/User/profile.php";
+        include_once ROOT . "/app/View/Template/footer.php";
     }
 
     public function signinAction()
     {
-        include_once ROOT . "/View/Template/header.php";
-        include_once ROOT . "/View/User/signin.php";
-        include_once ROOT . "/View/Template/footer.php";
+        include_once ROOT . "/app/View/Template/header.php";
+        include_once ROOT . "/app/View/User/signin.php";
+        include_once ROOT . "/app/View/Template/footer.php";
     }
 
     public function signupAction()
     {
-        include_once ROOT . "/View/Template/header.php";
-        include_once ROOT . "/View/User/signup.php";
-        include_once ROOT . "/View/Template/footer.php";
+        include_once ROOT . "/app/View/Template/header.php";
+        include_once ROOT . "/app/View/User/signup.php";
+        include_once ROOT . "/app/View/Template/footer.php";
     }
 
     public function editAction()
     {
-        include_once ROOT . "/View/Template/header.php";
-        include_once ROOT . "/View/User/edit.php";
-        include_once ROOT . "/View/Template/footer.php";
+        include_once ROOT . "/app/View/Template/header.php";
+        include_once ROOT . "/app/View/User/edit.php";
+        include_once ROOT . "/app/View/Template/footer.php";
     }
 
     public function execAction()

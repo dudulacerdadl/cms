@@ -7,26 +7,26 @@
     <link rel="stylesheet" href="./style/header.css">
     <link rel="stylesheet" href="./style/cards.css">
     <link rel="stylesheet" href="./style/footer.css">
-    <link rel="shortcut icon" href="./imgs/logo.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="./Resource/imgs/logo.png" type="image/x-icon"/>
     <title>Início</title>
 </head>
 <body>
     <main>
-        <? foreach ($this->getNotices() as $row): ?>
+        <?foreach ($this->getNotices() as $row): ?>
         <form action="./views/content.php" method="post">
         <button class="card-link" type="submit">
             <div class="card-notice">
-                <img class="cart-img" src="./imgs/notices/img-1.png" alt="pinguins">
+                <img class="cart-img" src="./Resource/imgs/notices/img-1.png" alt="pinguins">
                 <div class="card-texts">
-                    <h1 class="cart-title"><? echo $row['title'] ?></h1>
-                    <h3 class="cart-author"><? echo $row['author'] ?></h3>
+                    <h1 class="cart-title"><?echo $row['title'] ?></h1>
+                    <h3 class="cart-author"><?echo $row['author'] ?></h3>
                     <p class="cart-category">Categorias</p>
                     <p class="cart-tags">#tags</p>
                 </div>
             </div>
         </button>
         </form>
-        <? endforeach ?>
+        <?endforeach?>
     </main>
 </body>
 </html>

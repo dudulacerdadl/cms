@@ -1,6 +1,6 @@
 <?php
 
-namespace Model;
+namespace Cms\Model;
 
 use Exception;
 
@@ -9,20 +9,20 @@ class Client
     /**
      * @var string
      */
-    private $_name;
+    private $name;
     /**
      * @var string
      */
-    private $_email;
+    private $email;
     /**
      * @var string
      */
-    private $_password;
+    private $password;
 
     /**
      * @var \PDO
      */
-    private $_conn;
+    private $conn;
 
     /**
      * @param $button
@@ -36,7 +36,7 @@ class Client
         $password,
         $name = null
     ) {
-        $this->_conn = Connection::Conn();
+        $this->conn = Connection::Conn();
 
         switch ($button) {
             case 'Entrar':
@@ -65,7 +65,7 @@ class Client
             header("Location: /admin/signin");
         }
 
-        $result = $this->_conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
+        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
         $result->execute();
         $results = $result->fetch();
 
@@ -92,7 +92,7 @@ class Client
             header("Location: /admin/signup");
         }
 
-        $email = $this->_conn->prepare("SELECT `email` FROM `users` WHERE email = '" . $this->getEmail() . "'");
+        $email = $this->conn->prepare("SELECT `email` FROM `users` WHERE email = '" . $this->getEmail() . "'");
         $email->execute();
 
         if (isset($email->fetch()['email'])) {
@@ -101,13 +101,13 @@ class Client
             exit;
         }
 
-        $query = $this->_conn->prepare(
+        $query = $this->conn->prepare(
             "INSERT INTO `users` (`name`, `email`, `password`, `created_at`, `updated_at`) "
             . "VALUES ('" . $this->getName() . "', '" . $this->getEmail() . "', '" . $this->getPassword() . "', now(), now());"
         );
         $query->execute();
 
-        $result = $this->_conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
+        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
         $result->execute();
         $results = $result->fetch();
 
@@ -129,7 +129,7 @@ class Client
             header("Location: /admin/signup");
         }
 
-        $query = $this->_conn->prepare(
+        $query = $this->conn->prepare(
             "UPDATE `users` SET
             `name` = '" . $this->getName() . "',
             `email` = '" . $this->getEmail() . "',
@@ -139,7 +139,7 @@ class Client
         );
         $query->execute();
 
-        $result = $this->_conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE id = '" . $_SESSION['id'] . "'");
+        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE id = '" . $_SESSION['id'] . "'");
         $result->execute();
         $results = $result->fetch();
 
@@ -156,7 +156,7 @@ class Client
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -170,7 +170,7 @@ class Client
             throw new Exception("Usuário não encontrado");
         }
 
-        $this->_name = $name;
+        $this->name = $name;
         return $this;
     }
 
@@ -180,7 +180,7 @@ class Client
      */
     public function getEmail()
     {
-        return $this->_email;
+        return $this->email;
     }
 
     /**
@@ -194,7 +194,7 @@ class Client
             throw new Exception("E-mail não encontrado");
         }
 
-        $this->_email = $email;
+        $this->email = $email;
         return $this;
     }
 
@@ -204,7 +204,7 @@ class Client
      */
     public function getPassword()
     {
-        return $this->_password;
+        return $this->password;
     }
 
     /**
@@ -218,7 +218,7 @@ class Client
             throw new Exception("Senha não encontrada");
         }
 
-        $this->_password = $password;
+        $this->password = $password;
         return $this;
     }
 }

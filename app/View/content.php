@@ -13,15 +13,15 @@ session_start();
     <link rel="stylesheet" href="../style/header.css">
     <link rel="stylesheet" href="../style/notices.css">
     <link rel="stylesheet" href="../style/footer.css">
-    <link rel="shortcut icon" href="./imgs/logo.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="./Resource/imgs/logo.png" type="image/x-icon"/>
     <title>Conteúdo</title>
 </head>
 <body>
-    <? require_once '../template/header.php'; ?>
+    <?require_once '../template/header.php';?>
 
     <main>
         <a class="back-img" href="javascript:history.back()">
-            <img src="../imgs/icons/back.png" width="50px" alt="voltar">
+            <img src="../Resource/imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <div class="notices">
             <h1 class="notice-title">Título</h1>
@@ -35,6 +35,6 @@ session_start();
         </div>
     </main>
 
-    <? require_once '../template/footer.php'; ?>
+    <?require_once '../template/footer.php';?>
 </body>
 </html>
