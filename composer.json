@@ -1,0 +1,17 @@
+{
+    "name": "bis2arch/cms",
+    "autoload": {
+        "psr-4": {
+            "Controller\\": "Controller/",
+            "Model\\": "Model/",
+            "View\\": "View/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Eduardo Lacerda",
+            "email": "eduardo.filho@bistwobis.com.br"
+        }
+    ],
+    "require": {}
+}

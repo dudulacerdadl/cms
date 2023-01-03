@@ -1,3 +1,9 @@
+<?php
+
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,10 +15,10 @@
     <link rel="stylesheet" href="../../style/header.css">
     <link rel="stylesheet" href="../../style/footer.css">
     <link rel="shortcut icon" href="../imgs/logo.png" type="image/x-icon"/>
-    <title>Register</title>
+    <title>Registrar Notícia</title>
 </head>
 <body>
-    <? require_once '../../template/header.php'; ?>
+    <?require_once '../../template/header.php';?>
 
     <main>
         <a class="back-img" href="javascript:history.back()">
@@ -20,25 +26,23 @@
         </a>
         <div class="login-card">
             <div class="login-content">
-                <img class="user-img" src="../../imgs/icons/profile-user.png" alt="user">
                 <?
                 if (isset($_SESSION['msg'])) {
                     echo $_SESSION['msg'];
                     unset($_SESSION['msg']);
                 }
                 ?>
-                <form class="login-form" action="./register.php" method="POST">
-                    <input type="text" placeholder="Nome" name="name" id="name">
-                    <input type="email" placeholder="E-mail" name="user" id="access-email">
-                    <input type="password" placeholder="Password" name="pass" id="access-password">
-                    <input class="access-action" type="submit" name="btnRegister" value="Registrar">
+                <form class="notice-form" action="../../Model/Notice.php" method="POST">
+                    <input type="text" placeholder="Título" name="title" id="title">
+                    <input type="text" placeholder="Autor" name="author" id="author">
+                    <textarea name="content" id="content" placeholder="Conteúdo" cols="30" rows="10"></textarea>
 
-                    <a href="./signin.php">Logar</a>
+                    <input class="access-action" type="submit" name="actionButton" value="Cadastrar">
                 </form>
             </div>
         </div>
     </main>
 
-    <? require_once '../../template/footer.php'; ?>
+    <?require_once '../../template/footer.php';?>
 </body>
 </html>
