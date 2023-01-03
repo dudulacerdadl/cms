@@ -33,11 +33,11 @@ session_start();
                     unset($_SESSION['msg']);
                 }
                 ?>
-                <form class="login-form" action="./register.php" method="POST">
+                <form class="login-form" action="../../Model/Client.php" method="POST">
                     <input type="text" placeholder="Nome" name="name" id="name" value="<? echo $_SESSION['name'] ?>">
                     <input type="email" placeholder="E-mail" name="user" id="access-email" value="<? echo $_SESSION['email'] ?>">
                     <input type="password" placeholder="Password" name="pass" id="access-password">
-                    <input class="access-action" type="submit" name="btnRegister" value="Registrar">
+                    <input class="access-action" type="submit" name="actionButton" value="Editar">
                 </form>
             </div>
         </div>
