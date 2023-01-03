@@ -1,9 +1,3 @@
-<?php
-
-session_start();
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -33,13 +27,13 @@ session_start();
                     unset($_SESSION['msg']);
                 }
                 ?>
-                <form class="login-form" action="../../Model/Client.php" method="POST">
+                <form class="login-form" action="/admin/sign/exec" method="POST">
                     <input type="text" placeholder="Nome" name="name" id="name">
                     <input type="email" placeholder="E-mail" name="user" id="access-email">
                     <input type="password" placeholder="Password" name="pass" id="access-password">
                     <input class="access-action" type="submit" name="actionButton" value="Registrar">
 
-                    <a href="./signin.php">Logar</a>
+                    <a href="/admin/signin">Logar</a>
                 </form>
             </div>
         </div>

@@ -17,7 +17,7 @@
             <img src="<? ROOT ?>/imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <p>Olá <? echo $_SESSION['name'] ?>, Bem-Vindo!</p>
-        <a href="./edit.php">Editar</a>
+        <a href="/admin/edit">Editar</a>
         <a href="../notice/new.php">Cadastrar Notícia</a>
         <a href="/admin/signout">Sair</a>
     </main>

@@ -25,12 +25,12 @@
                     unset($_SESSION['msg']);
                 }
                 ?>
-                <form class="login-form" action="/admin/signin/exec" method="POST">
+                <form class="login-form" action="/admin/sign/exec" method="POST">
                     <input type="email" placeholder="E-mail" name="user" id="access-email">
                     <input type="password" placeholder="Password" name="pass" id="access-password">
                     <input class="access-action" type="submit" name="actionButton" value="Entrar">
 
-                    <a href="./signup.php">Registre-se</a>
+                    <a href="/admin/signup">Registre-se</a>
                 </form>
             </div>
         </div>

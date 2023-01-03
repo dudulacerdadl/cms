@@ -1,9 +1,3 @@
-<?php
-
-session_start();
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -18,8 +12,6 @@ session_start();
     <title>Registrar Notícia</title>
 </head>
 <body>
-    <?require_once '../../template/header.php';?>
-
     <main>
         <a class="back-img" href="javascript:history.back()">
             <img src="../../imgs/icons/back.png" width="50px" alt="voltar">
@@ -42,7 +34,5 @@ session_start();
             </div>
         </div>
     </main>
-
-    <?require_once '../../template/footer.php';?>
 </body>
 </html>

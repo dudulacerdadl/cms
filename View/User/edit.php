@@ -1,39 +1,31 @@
-<?php
-
-session_start();
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style/notices.css">
-    <link rel="stylesheet" href="../../style/login.css">
-    <link rel="stylesheet" href="../../style/header.css">
-    <link rel="stylesheet" href="../../style/footer.css">
+    <link rel="stylesheet" href="<? ROOT ?>/style/notices.css">
+    <link rel="stylesheet" href="<? ROOT ?>/style/login.css">
+    <link rel="stylesheet" href="<? ROOT ?>/style/header.css">
+    <link rel="stylesheet" href="<? ROOT ?>/style/footer.css">
     <link rel="shortcut icon" href="../imgs/logo.png" type="image/x-icon"/>
     <title>Editar</title>
 </head>
 <body>
-    <? require_once '../../template/header.php'; ?>
-
     <main>
         <a class="back-img" href="javascript:history.back()">
-            <img src="../../imgs/icons/back.png" width="50px" alt="voltar">
+            <img src="<? ROOT ?>/imgs/icons/back.png" width="50px" alt="voltar">
         </a>
         <div class="login-card">
             <div class="login-content">
-                <img class="user-img" src="../../imgs/icons/profile-user.png" alt="user">
+                <img class="user-img" src="<? ROOT ?>/imgs/icons/profile-user.png" alt="user">
                 <?
                 if (isset($_SESSION['msg'])) {
                     echo $_SESSION['msg'];
                     unset($_SESSION['msg']);
                 }
                 ?>
-                <form class="login-form" action="../../Model/Client.php" method="POST">
+                <form class="login-form" action="/admin/sign/exec" method="POST">
                     <input type="text" placeholder="Nome" name="name" id="name" value="<? echo $_SESSION['name'] ?>">
                     <input type="email" placeholder="E-mail" name="user" id="access-email" value="<? echo $_SESSION['email'] ?>">
                     <input type="password" placeholder="Password" name="pass" id="access-password">
@@ -42,7 +34,5 @@ session_start();
             </div>
         </div>
     </main>
-
-    <? require_once '../../template/footer.php'; ?>
 </body>
 </html>

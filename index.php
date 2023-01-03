@@ -14,5 +14,6 @@ $route->add('/admin/home', 'Controller\\BackendController', 'profile');
 $route->add('/admin/signin', 'Controller\\BackendController', 'signin');
 $route->add('/admin/signup', 'Controller\\BackendController', 'signup');
 $route->add('/admin/signout', 'Controller\\BackendController', 'signout');
-$route->add('/admin/signin/exec', 'Controller\\BackendController', 'signinExec');
+$route->add('/admin/edit', 'Controller\\BackendController', 'edit');
+$route->add('/admin/sign/exec', 'Controller\\BackendController', 'exec');
 $route->submit();
