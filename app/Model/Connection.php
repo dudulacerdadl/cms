@@ -22,4 +22,16 @@ class Connection
             die("Não foi possível se conectar ao banco de dados ".$env['DBNAME']." :" . $pe->getMessage());
         }
     }
+
+    public static function ConnSqlite()
+    {
+        $env = new Env();
+        $env = $env->getVariables();
+
+        try {
+            return new PDO('sqlite:'.ROOT.'/Resource/db/Banco.db');
+        } catch (PDOException $pe) {
+            die("Não foi possível se conectar ao banco de dados ".$env['DBNAME']." :" . $pe->getMessage());
+        }
+    }
 }

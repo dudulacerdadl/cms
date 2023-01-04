@@ -20,11 +20,11 @@
             <div class="login-content">
                 <img class="user-img" src="<?ROOT?>/Resource/imgs/icons/profile-user.png" alt="user">
                 <?
-if (isset($_SESSION['msg'])) {
-    echo $_SESSION['msg'];
-    unset($_SESSION['msg']);
-}
-?>
+                if (isset($_SESSION['msg'])) {
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                }
+                ?>
                 <form class="login-form" action="/admin/sign/exec" method="POST">
                     <input type="text" placeholder="Nome" name="name" id="name">
                     <input type="email" placeholder="E-mail" name="user" id="access-email">

@@ -10,10 +10,12 @@ class Notice
      * @var string
      */
     private $title;
+
     /**
      * @var string
      */
     private $author;
+
     /**
      * @var string
      */
@@ -23,6 +25,11 @@ class Notice
      * @var \PDO
      */
     private $conn;
+
+    /**
+     * @var \PDO
+     */
+    private $connSqlite;
 
     /**
      * @param $button
@@ -38,7 +45,8 @@ class Notice
         $content,
         $id = null
     ) {
-        $this->conn = Connection::Conn();
+        $this->conn       = Connection::Conn();
+        $this->connSqlite = Connection::ConnSqlite();
 
         switch ($button) {
             case 'Cadastrar':
@@ -76,11 +84,23 @@ class Notice
             header("Location: /notice/new");
         }
 
-        $query = $this->conn->prepare(
-            "INSERT INTO `notices` (`title`, `author`, `content`, `created_at`, `updated_at`) "
-            . "VALUES ('" . $this->getTitle() . "', '" . $this->getAuthor() . "', '" . $this->getContent() . "', now(), now());"
-        );
-        $query->execute();
+        $query = "INSERT INTO notices (title, author, content, created_at, updated_at) "
+            . "VALUES (:title, :author, :content, :created_at, :updated_at);";
+
+        $sql = [
+            'mysql'  => $this->conn->prepare($query),
+            'sqlite' => $this->connSqlite->prepare($query),
+        ];
+
+        foreach ($sql as $data) {
+            $data->execute([
+                ':title'      => $this->getTitle(),
+                ':author'     => $this->getAuthor(),
+                ':content'    => $this->getContent(),
+                ':created_at' => date("Y-m-d H:i:s"),
+                ':updated_at' => date("Y-m-d H:i:s"),
+            ]);
+        }
 
         header("Location: /admin/home");
     }
@@ -106,15 +126,28 @@ class Notice
             header("Location: /notice/edit");
         }
 
-        $query = $this->conn->prepare(
-            "UPDATE `notices` SET
-            `title` = '" . $this->getTitle() . "',
-            `author` = '" . $this->getAuthor() . "',
-            `content` = '" . $this->getContent() . "',
-            `updated_at` = now()
-            WHERE `id` = '" . $id . "';"
-        );
-        $query->execute();
+        $query = "UPDATE notices SET "
+            . "title = :title, "
+            . "author = :author, "
+            . "content = :countent, "
+            . "updated_at = :updated_at "
+            . "WHERE id = :id;";
+
+        $sql = [
+            'mysql'  => $this->conn->prepare($query),
+            'sqlite' => $this->connSqlite->prepare($query),
+        ];
+
+        foreach ($sql as $base => $data) {
+            echo "\n$base\n";
+            $data->execute([
+                ':title'      => $this->getTitle(),
+                ':author'     => $this->getAuthor(),
+                ':content'    => $this->getContent(),
+                ':updated_at' => date("Y-m-d H:i:s"),
+                ':id'         => intval($id),
+            ]);
+        }
 
         header("Location: /admin/home");
     }
@@ -124,11 +157,18 @@ class Notice
      */
     protected function deleteProcess($id)
     {
-        $query = $this->conn->prepare(
-            "DELETE FROM `notices`
-            WHERE `id` = '" . $id . "';"
-        );
-        $query->execute();
+        $query = "DELETE FROM notices WHERE id = :id;";
+
+        $sql = [
+            'mysql'  => $this->conn->prepare($query),
+            'sqlite' => $this->connSqlite->prepare($query),
+        ];
+
+        foreach ($sql as $data) {
+            $data->execute([
+                ':id' => $id,
+            ]);
+        }
 
         header("Location: /admin/home");
     }
