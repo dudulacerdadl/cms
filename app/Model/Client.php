@@ -48,6 +48,9 @@ class Client
             case 'Editar':
                 $this->editProcess($email, $password, $name);
                 break;
+            case 'Deletar':
+                $this->deleteProcess();
+                break;
             default:
                 $_SESSION['msg'] = 'Página não encontrada';
                 header("Location: /admin/signin");
@@ -148,6 +151,25 @@ class Client
         $_SESSION['name']     = $results['name'];
         $_SESSION['password'] = $results['password'];
         header("Location: /admin/home");
+    }
+
+    protected function deleteProcess()
+    {
+        $query = $this->conn->prepare(
+            "DELETE FROM `users`
+            WHERE `id` = '" . $_SESSION['id'] . "';"
+        );
+        $query->execute();
+
+        unset(
+            $_SESSION['id'],
+            $_SESSION['name'],
+            $_SESSION['email'],
+            $_SESSION['password']
+        );
+        $_SESSION['msg'] = "Usuário excluido com sucesso!";
+
+        header("Location: /admin/signin");
     }
 
     /**

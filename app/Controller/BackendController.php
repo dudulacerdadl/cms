@@ -3,13 +3,25 @@
 namespace Cms\Controller;
 
 use Cms\Model\Client;
+use Cms\Model\Connection;
 
 session_start();
 
 class BackendController
 {
+    /**
+     * @var array
+     */
+    private $notices = [];
+
     public function profileAction()
     {
+        $conn = Connection::Conn();
+        $data = $conn->prepare('SELECT * FROM `notices`');
+        $data->execute();
+
+        $this->setNotices($data->fetchAll());
+
         include_once ROOT . "/app/View/Template/header.php";
         include_once ROOT . "/app/View/User/profile.php";
         include_once ROOT . "/app/View/Template/footer.php";
@@ -57,5 +69,25 @@ class BackendController
         $_SESSION['msg'] = "Deslogado com sucesso!";
 
         header("Location: /admin/signin");
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getNotices()
+    {
+        return $this->notices;
+    }
+
+    /**
+     *
+     * @param  array  $notices
+     * @return self
+     */
+    public function setNotices($notices)
+    {
+        $this->notices = $notices;
+        return $this;
     }
 }

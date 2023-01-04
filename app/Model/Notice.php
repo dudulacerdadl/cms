@@ -1,140 +1,159 @@
 <?php
 
-namespace Model;
+namespace Cms\Model;
 
-require_once '../db/connection.php';
-
-session_start();
-
-new Notice();
+use Exception;
 
 class Notice
 {
     /**
      * @var string
      */
-    private $_name;
+    private $title;
     /**
      * @var string
      */
-    private $_email;
+    private $author;
     /**
      * @var string
      */
-    private $_password;
+    private $content;
 
     /**
-     * @var PDO
+     * @var \PDO
      */
-    private $_conn;
+    private $conn;
 
-    public function __construct()
-    {
-        $this->_conn = Connection::Conn();
-        switch (filter_input(INPUT_POST, 'actionButton')) {
+    /**
+     * @param $button
+     * @param $title
+     * @param $author
+     * @param $content
+     * @param $id
+     */
+    public function __construct(
+        $button,
+        $title,
+        $author,
+        $content,
+        $id = null
+    ) {
+        $this->conn = Connection::Conn();
+
+        switch ($button) {
             case 'Cadastrar':
-                $this->registerProcess();
+                $this->registerProcess($title, $author, $content);
                 break;
             case 'Editar':
-                $this->editProcess();
+                $this->editProcess($title, $author, $content, $id);
+                break;
+            case 'Deletar':
+                $this->deleteProcess($id);
                 break;
             default:
                 $_SESSION['msg'] = 'Página não encontrada';
-                header("Location: ../views/notice/new.php");
+                header("Location: /notice/new");
                 break;
         }
     }
 
-    protected function registerProcess()
-    {
+    /**
+     * @param $title
+     * @param $author
+     * @param $content
+     */
+    protected function registerProcess(
+        $title,
+        $author,
+        $content
+    ) {
         try {
-            $this->setName(filter_input(INPUT_POST, 'name'));
-            $this->setEmail(filter_input(INPUT_POST, 'user'));
-            $this->setPassword(filter_input(INPUT_POST, 'pass'));
+            $this->setTitle($title);
+            $this->setAuthor($author);
+            $this->setContent($content);
         } catch (Exception $e) {
             $_SESSION['msg'] = $e->getMessage();
-            header("Location: ../views/user/signup.php");
+            header("Location: /notice/new");
         }
 
-        $email = $this->_conn->prepare("SELECT `email` FROM `users` WHERE email = '" . $this->getEmail() . "'");
-        $email->execute();
-
-        if (isset($email->fetch()['email'])) {
-            $_SESSION['msg'] = 'E-mail já registrado';
-            header("Location: ../views/user/signup.php");
-            exit;
-        }
-
-        $query = $this->_conn->prepare(
-            "INSERT INTO `users` (`name`, `email`, `password`, `created_at`, `updated_at`) "
-            . "VALUES ('" . $this->getName() . "', '" . $this->getEmail() . "', '" . $this->getPassword() . "', now(), now());"
+        $query = $this->conn->prepare(
+            "INSERT INTO `notices` (`title`, `author`, `content`, `created_at`, `updated_at`) "
+            . "VALUES ('" . $this->getTitle() . "', '" . $this->getAuthor() . "', '" . $this->getContent() . "', now(), now());"
         );
         $query->execute();
 
-        $result = $this->_conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
-        $result->execute();
-        $results = $result->fetch();
-
-        $_SESSION['id']       = $results['id'];
-        $_SESSION['email']    = $results['email'];
-        $_SESSION['name']     = $results['name'];
-        $_SESSION['password'] = $results['password'];
-        header("Location: ../views/user/home.php");
+        header("Location: /admin/home");
     }
 
-    protected function editProcess()
-    {
+    /**
+     * @param $title
+     * @param $author
+     * @param $content
+     * @param $id
+     */
+    protected function editProcess(
+        $title,
+        $author,
+        $content,
+        $id
+    ) {
         try {
-            $this->setName(filter_input(INPUT_POST, 'name'));
-            $this->setEmail(filter_input(INPUT_POST, 'user'));
-            $this->setPassword(filter_input(INPUT_POST, 'pass'));
+            $this->setTitle($title);
+            $this->setAuthor($author);
+            $this->setContent($content);
         } catch (Exception $e) {
             $_SESSION['msg'] = $e->getMessage();
-            header("Location: ../views/user/signup.php");
+            header("Location: /notice/edit");
         }
 
-        $query = $this->_conn->prepare(
-            "UPDATE `users` SET
-            `name` = '".$this->getName()."',
-            `email` = '".$this->getEmail()."',
-            `password` = '".$this->getPassword()."',
+        $query = $this->conn->prepare(
+            "UPDATE `notices` SET
+            `title` = '" . $this->getTitle() . "',
+            `author` = '" . $this->getAuthor() . "',
+            `content` = '" . $this->getContent() . "',
             `updated_at` = now()
-            WHERE `id` = '".$_SESSION['id']."';"
+            WHERE `id` = '" . $id . "';"
         );
         $query->execute();
 
-        $result = $this->_conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE id = '" . $_SESSION['id'] . "'");
-        $result->execute();
-        $results = $result->fetch();
+        header("Location: /admin/home");
+    }
 
-        $_SESSION['id']       = $results['id'];
-        $_SESSION['email']    = $results['email'];
-        $_SESSION['name']     = $results['name'];
-        $_SESSION['password'] = $results['password'];
-        header("Location: ../views/user/home.php");
+    /**
+     * @param $id
+     */
+    protected function deleteProcess($id)
+    {
+        $query = $this->conn->prepare(
+            "DELETE FROM `notices`
+            WHERE `id` = '" . $id . "';"
+        );
+        $query->execute();
+
+        header("Location: /admin/home");
     }
 
     /**
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->_name;
+        return $this->title;
     }
 
     /**
      *
-     * @param  string $name
+     * @param  string $title
      * @return self
      */
-    public function setName($name)
+    public function setTitle($title)
     {
-        if (!is_string($name) || empty($name)) {
-            throw new Exception("Usuário não encontrado");
+        if (!is_string($title) || empty($title)) {
+            throw new Exception("Título não encontrado");
         }
 
-        $this->_name = $name;
+        $this->title = $title;
         return $this;
     }
 
@@ -142,23 +161,23 @@ class Notice
      *
      * @return string
      */
-    public function getEmail()
+    public function getAuthor()
     {
-        return $this->_email;
+        return $this->author;
     }
 
     /**
      *
-     * @param  string $email
+     * @param  string $author
      * @return self
      */
-    public function setEmail($email)
+    public function setAuthor($author)
     {
-        if (!is_string($email) || empty($email)) {
-            throw new Exception("E-mail não encontrado");
+        if (!is_string($author) || empty($author)) {
+            throw new Exception("Autor não encontrado");
         }
 
-        $this->_email = $email;
+        $this->author = $author;
         return $this;
     }
 
@@ -166,23 +185,23 @@ class Notice
      *
      * @return string
      */
-    public function getPassword()
+    public function getContent()
     {
-        return $this->_password;
+        return $this->content;
     }
 
     /**
      *
-     * @param  string $password
+     * @param  string $content
      * @return self
      */
-    public function setPassword($password)
+    public function setContent($content)
     {
-        if (!is_string($password) || empty($password)) {
-            throw new Exception("Senha não encontrada");
+        if (!is_string($content) || empty($content)) {
+            throw new Exception("Conteúdo não encontrado");
         }
 
-        $this->_password = $password;
+        $this->content = $content;
         return $this;
     }
 }

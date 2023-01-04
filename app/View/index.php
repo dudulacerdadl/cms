@@ -13,7 +13,11 @@
 <body>
     <main>
         <?foreach ($this->getNotices() as $row): ?>
-        <form action="./views/content.php" method="post">
+        <form action="/notice" class="cart-form" method="post">
+        <input type="hidden" name="title" value="<?echo $row['title'] ?>">
+        <input type="hidden" name="author" value="<?echo $row['author'] ?>">
+        <input type="hidden" name="content" value="<?echo $row['content'] ?>">
+        <input type="hidden" name="date" value="<?echo $row['created_at'] ?>">
         <button class="card-link" type="submit">
             <div class="card-notice">
                 <img class="cart-img" src="./Resource/imgs/notices/img-1.png" alt="pinguins">
