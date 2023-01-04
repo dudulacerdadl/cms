@@ -5,14 +5,6 @@
 }
 
 .notices {
-    /* display: grid;
-    grid-template-areas:
-        "title title title title"
-        "author author date"
-        "categories categories categories categories"
-        "tags tags tags tags"
-        "texts texts texts texts"
-    ; */
     padding-top: 2.5%;
     padding-bottom: 2.5%;
     padding-left: 5%;

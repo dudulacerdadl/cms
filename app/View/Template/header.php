@@ -1,6 +1,8 @@
 <header>
     <section class="login-section">
-    <img src="<? ROOT ?>/imgs/logo.png" alt="cms" class="logo-header">
+    <a href="/">
+        <img src="<?ROOT?>/Resource/imgs/logo.png" alt="cms" class="logo-header">
+    </a>
     </section>
     <h1 class="page-title">CMS - Sistema de Gerenciamento de Conteúdo</h1>
 
@@ -8,7 +10,7 @@
 
     <section class="login-section">
         <a href="/admin/signin">
-            <img class="login-img" src="<? ROOT ?>/imgs/icons/profile.png" alt="Login">
+            <img class="login-img" src="<?ROOT?>/Resource/imgs/icons/profile.png" alt="Login">
         </a>
     </section>
 
@@ -16,7 +18,7 @@
 
     <section class="login-section">
         <a href="/admin/home">
-            <img class="login-img" src="<? ROOT ?>/imgs/icons/profile.png" alt="Login">
+            <img class="login-img" src="<?ROOT?>/Resource/imgs/icons/profile.png" alt="Login">
         </a>
     </section>
 
