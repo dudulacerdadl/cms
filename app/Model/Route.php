@@ -1,5 +1,7 @@
 <?php
 
+namespace Cms\Model;
+
 class Route
 {
     private $_uri = [];

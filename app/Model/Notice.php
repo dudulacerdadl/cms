@@ -4,6 +4,8 @@ namespace Cms\Model;
 
 use Exception;
 
+require_once ROOT . '/lib/Connection.php';
+
 class Notice
 {
     /**
@@ -45,8 +47,9 @@ class Notice
         $content,
         $id = null
     ) {
-        $this->conn       = Connection::Conn();
-        $this->connSqlite = Connection::ConnSqlite();
+        $conn             = new \Connection();
+        $this->conn       = $conn->Conn();
+        $this->connSqlite = $conn->ConnSqlite();
 
         switch ($button) {
             case 'Cadastrar':
@@ -129,7 +132,7 @@ class Notice
         $query = "UPDATE notices SET "
             . "title = :title, "
             . "author = :author, "
-            . "content = :countent, "
+            . "content = :content, "
             . "updated_at = :updated_at "
             . "WHERE id = :id;";
 
@@ -138,8 +141,7 @@ class Notice
             'sqlite' => $this->connSqlite->prepare($query),
         ];
 
-        foreach ($sql as $base => $data) {
-            echo "\n$base\n";
+        foreach ($sql as $data) {
             $data->execute([
                 ':title'      => $this->getTitle(),
                 ':author'     => $this->getAuthor(),

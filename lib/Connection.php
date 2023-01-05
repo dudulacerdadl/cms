@@ -1,15 +1,12 @@
 <?php
 
-namespace Cms\Model;
-
-use PDO;
-use PDOException;
+require_once ROOT . '/lib/Env.php';
 
 class Connection
 {
     public static function Conn()
     {
-        $env = new Env();
+        $env = new \Env();
         $env = $env->getVariables();
 
         try {
