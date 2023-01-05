@@ -4,9 +4,7 @@ namespace Cms\Model;
 
 use Exception;
 
-require_once ROOT . '/lib/Connection.php';
-
-class Client
+class User
 {
     /**
      * @var string
@@ -38,14 +36,15 @@ class Client
      * @param $name
      */
     public function __construct(
+        $conn,
+        $connSqlite,
         $button,
         $email,
         $password,
         $name = null
     ) {
-        $conn             = new \Connection();
-        $this->conn       = $conn->Conn();
-        $this->connSqlite = $conn->ConnSqlite();
+        $this->conn       = $conn;
+        $this->connSqlite = $connSqlite;
 
         switch ($button) {
             case 'Entrar':

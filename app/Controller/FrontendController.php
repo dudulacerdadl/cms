@@ -2,11 +2,7 @@
 
 namespace Cms\Controller;
 
-require_once ROOT . '/lib/Connection.php';
-
-session_start();
-
-class FrontendController
+class FrontendController extends AbstractController
 {
     /**
      * @var array
@@ -15,16 +11,12 @@ class FrontendController
 
     public function indexAction()
     {
-        $conn = new \Connection();
-        $conn = $conn->Conn();
-        $data = $conn->prepare('SELECT * FROM `notices`');
+        $data = $this->getConn()->prepare('SELECT * FROM `notices`');
         $data->execute();
 
         $this->setNotices($data->fetchAll());
 
-        include_once ROOT . "/app/View/Template/header.php";
-        include_once ROOT . "/app/View/index.php";
-        include_once ROOT . "/app/View/Template/footer.php";
+        $this->render('index', 'Início');
     }
 
     /**

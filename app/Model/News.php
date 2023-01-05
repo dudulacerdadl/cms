@@ -4,9 +4,7 @@ namespace Cms\Model;
 
 use Exception;
 
-require_once ROOT . '/lib/Connection.php';
-
-class Notice
+class News
 {
     /**
      * @var string
@@ -34,6 +32,8 @@ class Notice
     private $connSqlite;
 
     /**
+     * @param $conn
+     * @param $connSqlite
      * @param $button
      * @param $title
      * @param $author
@@ -41,15 +41,16 @@ class Notice
      * @param $id
      */
     public function __construct(
+        $conn,
+        $connSqlite,
         $button,
         $title,
         $author,
         $content,
         $id = null
     ) {
-        $conn             = new \Connection();
-        $this->conn       = $conn->Conn();
-        $this->connSqlite = $conn->ConnSqlite();
+        $this->conn       = $conn;
+        $this->connSqlite = $connSqlite;
 
         switch ($button) {
             case 'Cadastrar':
@@ -63,7 +64,7 @@ class Notice
                 break;
             default:
                 $_SESSION['msg'] = 'Página não encontrada';
-                header("Location: /notice/new");
+                header("Location: /news/new");
                 break;
         }
     }
@@ -84,7 +85,7 @@ class Notice
             $this->setContent($content);
         } catch (Exception $e) {
             $_SESSION['msg'] = $e->getMessage();
-            header("Location: /notice/new");
+            header("Location: /news/new");
         }
 
         $query = "INSERT INTO notices (title, author, content, created_at, updated_at) "
@@ -126,7 +127,7 @@ class Notice
             $this->setContent($content);
         } catch (Exception $e) {
             $_SESSION['msg'] = $e->getMessage();
-            header("Location: /notice/edit");
+            header("Location: /news/edit");
         }
 
         $query = "UPDATE notices SET "

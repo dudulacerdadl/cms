@@ -2,57 +2,44 @@
 
 namespace Cms\Controller;
 
-use Cms\Model\Client;
+use Cms\Model\User;
 
-require_once ROOT . '/lib/Connection.php';
-
-session_start();
-
-class BackendController
+class BackendController extends AbstractController
 {
-    /**
-     * @var array
-     */
-    private $notices = [];
-
     public function profileAction()
     {
-        $conn = new \Connection();
-        $conn = $conn->Conn();
-        $data = $conn->prepare('SELECT * FROM `notices`');
+        $data = $this->getConn()->prepare('SELECT * FROM `notices`');
         $data->execute();
 
-        $this->setNotices($data->fetchAll());
-
-        include_once ROOT . "/app/View/Template/header.php";
-        include_once ROOT . "/app/View/User/profile.php";
-        include_once ROOT . "/app/View/Template/footer.php";
+        $this->render(
+            'User/profile',
+            'Home',
+            [
+                'notices' => $data->fetchAll()
+            ]
+        );
     }
 
     public function signinAction()
     {
-        include_once ROOT . "/app/View/Template/header.php";
-        include_once ROOT . "/app/View/User/signin.php";
-        include_once ROOT . "/app/View/Template/footer.php";
+        $this->render('User/signin', 'Login');
     }
 
     public function signupAction()
     {
-        include_once ROOT . "/app/View/Template/header.php";
-        include_once ROOT . "/app/View/User/signup.php";
-        include_once ROOT . "/app/View/Template/footer.php";
+        $this->render('User/signup', 'Register');
     }
 
     public function editAction()
     {
-        include_once ROOT . "/app/View/Template/header.php";
-        include_once ROOT . "/app/View/User/edit.php";
-        include_once ROOT . "/app/View/Template/footer.php";
+        $this->render('User/edit', 'Editar');
     }
 
     public function execAction()
     {
-        new Client(
+        new User(
+            $this->getConn(),
+            $this->getConnSqlite(),
             filter_input(INPUT_POST, 'actionButton'),
             filter_input(INPUT_POST, 'user'),
             filter_input(INPUT_POST, 'pass'),
@@ -71,25 +58,5 @@ class BackendController
         $_SESSION['msg'] = "Deslogado com sucesso!";
 
         header("Location: /admin/signin");
-    }
-
-    /**
-     *
-     * @return array
-     */
-    public function getNotices()
-    {
-        return $this->notices;
-    }
-
-    /**
-     *
-     * @param  array  $notices
-     * @return self
-     */
-    public function setNotices($notices)
-    {
-        $this->notices = $notices;
-        return $this;
     }
 }

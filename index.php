@@ -17,8 +17,8 @@ $route->add('/admin/signup', \Cms\Controller\BackendController::class, 'signup')
 $route->add('/admin/signout', \Cms\Controller\BackendController::class, 'signout');
 $route->add('/admin/edit', \Cms\Controller\BackendController::class, 'edit');
 $route->add('/admin/sign/exec', \Cms\Controller\BackendController::class, 'exec');
-$route->add('/notice', \Cms\Controller\NoticeController::class, 'open');
-$route->add('/notice/new', \Cms\Controller\NoticeController::class, 'new');
-$route->add('/notice/edit', \Cms\Controller\NoticeController::class, 'edit');
-$route->add('/notice/edit/exec', \Cms\Controller\NoticeController::class, 'exec');
+$route->add('/news', \Cms\Controller\NewsController::class, 'open');
+$route->add('/news/new', \Cms\Controller\NewsController::class, 'new');
+$route->add('/news/edit', \Cms\Controller\NewsController::class, 'edit');
+$route->add('/news/edit/exec', \Cms\Controller\NewsController::class, 'exec');
 $route->submit();
