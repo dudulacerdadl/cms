@@ -2,7 +2,7 @@
 
 namespace Cms\Controller;
 
-use Cms\Model\Connection;
+require_once ROOT . '/lib/Connection.php';
 
 session_start();
 
@@ -15,7 +15,8 @@ class FrontendController
 
     public function indexAction()
     {
-        $conn = Connection::Conn();
+        $conn = new \Connection();
+        $conn = $conn->Conn();
         $data = $conn->prepare('SELECT * FROM `notices`');
         $data->execute();
 

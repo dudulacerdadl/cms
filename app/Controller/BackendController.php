@@ -3,7 +3,8 @@
 namespace Cms\Controller;
 
 use Cms\Model\Client;
-use Cms\Model\Connection;
+
+require_once ROOT . '/lib/Connection.php';
 
 session_start();
 
@@ -16,7 +17,8 @@ class BackendController
 
     public function profileAction()
     {
-        $conn = Connection::Conn();
+        $conn = new \Connection();
+        $conn = $conn->Conn();
         $data = $conn->prepare('SELECT * FROM `notices`');
         $data->execute();
 

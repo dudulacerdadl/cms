@@ -1,7 +1,5 @@
 <?php
 
-namespace Cms\Model;
-
 use Exception;
 
 class Env

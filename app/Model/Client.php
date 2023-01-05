@@ -4,6 +4,8 @@ namespace Cms\Model;
 
 use Exception;
 
+require_once ROOT . '/lib/Connection.php';
+
 class Client
 {
     /**
@@ -25,6 +27,11 @@ class Client
     private $conn;
 
     /**
+     * @var \PDO
+     */
+    private $connSqlite;
+
+    /**
      * @param $button
      * @param $email
      * @param $password
@@ -36,7 +43,9 @@ class Client
         $password,
         $name = null
     ) {
-        $this->conn = Connection::Conn();
+        $conn             = new \Connection();
+        $this->conn       = $conn->Conn();
+        $this->connSqlite = $conn->ConnSqlite();
 
         switch ($button) {
             case 'Entrar':
@@ -58,8 +67,14 @@ class Client
         }
     }
 
-    protected function loginProcess($email, $password)
-    {
+    /**
+     * @param $email
+     * @param $password
+     */
+    protected function loginProcess(
+        $email,
+        $password
+    ) {
         try {
             $this->setEmail($email);
             $this->setPassword($password);
@@ -84,8 +99,16 @@ class Client
         header("Location: /admin/home");
     }
 
-    protected function registerProcess($email, $password, $name)
-    {
+    /**
+     * @param $email
+     * @param $password
+     * @param $name
+     */
+    protected function registerProcess(
+        $email,
+        $password,
+        $name
+    ) {
         try {
             $this->setName($name);
             $this->setEmail($email);
@@ -104,11 +127,23 @@ class Client
             exit;
         }
 
-        $query = $this->conn->prepare(
-            "INSERT INTO `users` (`name`, `email`, `password`, `created_at`, `updated_at`) "
-            . "VALUES ('" . $this->getName() . "', '" . $this->getEmail() . "', '" . $this->getPassword() . "', now(), now());"
-        );
-        $query->execute();
+        $query = "INSERT INTO `users` (`name`, `email`, `password`, `created_at`, `updated_at`) "
+            . "VALUES (:name, :email, :password, :created_at, :updated_at);";
+
+        $sql = [
+            'sqlite' => $this->connSqlite->prepare($query),
+            'mysql'  => $this->conn->prepare($query),
+        ];
+
+        foreach ($sql as $data) {
+            $data->execute([
+                ':name'       => $this->getName(),
+                ':email'      => $this->getEmail(),
+                ':password'   => $this->getPassword(),
+                ':created_at' => date("Y-m-d H:i:s"),
+                ':updated_at' => date("Y-m-d H:i:s"),
+            ]);
+        }
 
         $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
         $result->execute();
@@ -121,8 +156,16 @@ class Client
         header("Location: /admin/home");
     }
 
-    protected function editProcess($email, $password, $name)
-    {
+    /**
+     * @param $email
+     * @param $password
+     * @param $name
+     */
+    protected function editProcess(
+        $email,
+        $password,
+        $name
+    ) {
         try {
             $this->setName($name);
             $this->setEmail($email);
@@ -132,15 +175,27 @@ class Client
             header("Location: /admin/signup");
         }
 
-        $query = $this->conn->prepare(
-            "UPDATE `users` SET
-            `name` = '" . $this->getName() . "',
-            `email` = '" . $this->getEmail() . "',
-            `password` = '" . $this->getPassword() . "',
-            `updated_at` = now()
-            WHERE `id` = '" . $_SESSION['id'] . "';"
-        );
-        $query->execute();
+        $query = "UPDATE `users` SET "
+            . "`name` = :name, "
+            . "`email` = :email, "
+            . "`password` = :password, "
+            . "`updated_at` = :updated_at "
+            . "WHERE `id` = :id;";
+
+        $sql = [
+            'sqlite' => $this->connSqlite->prepare($query),
+            'mysql'  => $this->conn->prepare($query),
+        ];
+
+        foreach ($sql as $data) {
+            $data->execute([
+                ':name'       => $this->getName(),
+                ':email'      => $this->getEmail(),
+                ':password'   => $this->getPassword(),
+                ':updated_at' => date("Y-m-d H:i:s"),
+                ':id'         => $_SESSION['id'],
+            ]);
+        }
 
         $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE id = '" . $_SESSION['id'] . "'");
         $result->execute();
@@ -155,11 +210,18 @@ class Client
 
     protected function deleteProcess()
     {
-        $query = $this->conn->prepare(
-            "DELETE FROM `users`
-            WHERE `id` = '" . $_SESSION['id'] . "';"
-        );
-        $query->execute();
+        $query = "DELETE FROM `users` WHERE `id` = :id;";
+
+        $sql = [
+            'sqlite' => $this->connSqlite->prepare($query),
+            'mysql'  => $this->conn->prepare($query),
+        ];
+
+        foreach ($sql as $data) {
+            $data->execute([
+                ':id' => $_SESSION['id'],
+            ]);
+        }
 
         unset(
             $_SESSION['id'],
