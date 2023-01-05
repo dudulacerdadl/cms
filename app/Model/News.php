@@ -22,18 +22,12 @@ class News
     private $content;
 
     /**
-     * @var \PDO
+     * @var mixed
      */
     private $conn;
 
     /**
-     * @var \PDO
-     */
-    private $connSqlite;
-
-    /**
      * @param $conn
-     * @param $connSqlite
      * @param $button
      * @param $title
      * @param $author
@@ -42,15 +36,13 @@ class News
      */
     public function __construct(
         $conn,
-        $connSqlite,
         $button,
         $title,
         $author,
         $content,
         $id = null
     ) {
-        $this->conn       = $conn;
-        $this->connSqlite = $connSqlite;
+        $this->conn = $conn;
 
         switch ($button) {
             case 'Cadastrar':
@@ -88,23 +80,14 @@ class News
             header("Location: /news/new");
         }
 
-        $query = "INSERT INTO notices (title, author, content, created_at, updated_at) "
-            . "VALUES (:title, :author, :content, :created_at, :updated_at);";
-
-        $sql = [
-            'mysql'  => $this->conn->prepare($query),
-            'sqlite' => $this->connSqlite->prepare($query),
-        ];
-
-        foreach ($sql as $data) {
-            $data->execute([
-                ':title'      => $this->getTitle(),
-                ':author'     => $this->getAuthor(),
-                ':content'    => $this->getContent(),
-                ':created_at' => date("Y-m-d H:i:s"),
-                ':updated_at' => date("Y-m-d H:i:s"),
-            ]);
-        }
+        $this->conn->operation(
+            'insert',
+            [
+                'table'  => 'notices',
+                'params' => ['title', 'author', 'content', 'created_at', 'updated_at'],
+                'values' => [$this->getTitle(), $this->getAuthor(), $this->getContent(), date("Y-m-d H:i:s"), date("Y-m-d H:i:s")],
+            ]
+        );
 
         header("Location: /admin/home");
     }
@@ -130,27 +113,15 @@ class News
             header("Location: /news/edit");
         }
 
-        $query = "UPDATE notices SET "
-            . "title = :title, "
-            . "author = :author, "
-            . "content = :content, "
-            . "updated_at = :updated_at "
-            . "WHERE id = :id;";
-
-        $sql = [
-            'mysql'  => $this->conn->prepare($query),
-            'sqlite' => $this->connSqlite->prepare($query),
-        ];
-
-        foreach ($sql as $data) {
-            $data->execute([
-                ':title'      => $this->getTitle(),
-                ':author'     => $this->getAuthor(),
-                ':content'    => $this->getContent(),
-                ':updated_at' => date("Y-m-d H:i:s"),
-                ':id'         => intval($id),
-            ]);
-        }
+        $this->conn->operation(
+            'update',
+            [
+                'table'  => 'notices',
+                'id'     => $id,
+                'params' => ['title', 'author', 'content', 'updated_at'],
+                'values' => [$this->getTitle(), $this->getAuthor(), $this->getContent(), date("Y-m-d H:i:s")],
+            ]
+        );
 
         header("Location: /admin/home");
     }
@@ -160,18 +131,13 @@ class News
      */
     protected function deleteProcess($id)
     {
-        $query = "DELETE FROM notices WHERE id = :id;";
-
-        $sql = [
-            'mysql'  => $this->conn->prepare($query),
-            'sqlite' => $this->connSqlite->prepare($query),
-        ];
-
-        foreach ($sql as $data) {
-            $data->execute([
-                ':id' => $id,
-            ]);
-        }
+        $this->conn->operation(
+            'delete',
+            [
+                'table'  => 'notices',
+                'id'     => $id,
+            ]
+        );
 
         header("Location: /admin/home");
     }

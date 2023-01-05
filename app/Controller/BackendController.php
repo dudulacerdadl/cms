@@ -8,14 +8,22 @@ class BackendController extends AbstractController
 {
     public function profileAction()
     {
-        $data = $this->getConn()->prepare('SELECT * FROM `notices`');
-        $data->execute();
+        $data = $this->getConnection()->operation(
+            'select',
+            [
+                'table'       => 'notices',
+                'params'      => ['*'],
+                'where'       => null,
+                'whereParams' => null,
+                'whereValues' => null,
+            ]
+        );
 
         $this->render(
             'User/profile',
             'Home',
             [
-                'notices' => $data->fetchAll()
+                'news' => $data->fetchAll(),
             ]
         );
     }
@@ -38,8 +46,7 @@ class BackendController extends AbstractController
     public function execAction()
     {
         new User(
-            $this->getConn(),
-            $this->getConnSqlite(),
+            $this->getConnection(),
             filter_input(INPUT_POST, 'actionButton'),
             filter_input(INPUT_POST, 'user'),
             filter_input(INPUT_POST, 'pass'),

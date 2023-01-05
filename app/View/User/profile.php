@@ -10,7 +10,7 @@
 
         <ul>
             <h2>Notícias para Edição</h2>
-            <?foreach ($params['notices'] as $row): ?>
+            <?foreach ($params['news'] as $row): ?>
             <li>
                 <form action="/news/edit" class="cart-form" method="post">
                 <input type="hidden" name="id" value="<?echo $row['id'] ?>">

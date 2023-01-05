@@ -42,8 +42,7 @@ class NewsController extends AbstractController
     public function execAction()
     {
         new News(
-            $this->getConn(),
-            $this->getConnSqlite(),
+            $this->getConnection(),
             filter_input(INPUT_POST, 'actionButton'),
             filter_input(INPUT_POST, 'title'),
             filter_input(INPUT_POST, 'author'),

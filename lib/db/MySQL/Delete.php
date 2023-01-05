@@ -3,49 +3,20 @@
 class Delete extends Connection
 {
     /**
-     * @var mixed
+     * @param $table
+     * @param $id
+     * @return mixed
      */
-    private $query;
-
-    /**
-     * @param string $table
-     * @param string $id
-     */
-    public function __construct(
+    public function execute(
         $table,
         $id
     ) {
-        $this->setQuery(
-            self::Conn()->prepare(
-                "DELETE FROM `$table` "
-                . "WHERE `id` = '" . $id . "';"
-            )
+        $query = self::Conn()->prepare(
+            "DELETE FROM `$table` "
+            . "WHERE `id` = '" . $id . "';"
         );
-    }
+        $query->execute();
 
-    /**
-     * @return mixed
-     */
-    public function execute()
-    {
-        return $this->getQuery()->execute();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * @param  mixed  $query
-     * @return self
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-        return $this;
+        return $query;
     }
 }

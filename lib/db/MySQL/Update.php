@@ -3,17 +3,13 @@
 class Update extends Connection
 {
     /**
-     * @var mixed
+     * @param $table
+     * @param $id
+     * @param array $params
+     * @param array $values
+     * @return mixed
      */
-    private $query;
-
-    /**
-     * @param string $table
-     * @param string $id
-     * @param array  $params
-     * @param array  $values
-     */
-    public function __construct(
+    public function execute(
         $table,
         $id,
         array $params,
@@ -27,32 +23,9 @@ class Update extends Connection
 
         $queryString = rtrim($queryString, ',') . "WHERE `id` = '$id';";
 
-        $this->setQuery(self::Conn()->prepare($queryString));
-    }
+        $query = self::Conn()->prepare($queryString);
+        $query->execute();
 
-    /**
-     * @return mixed
-     */
-    public function execute()
-    {
-        return $this->getQuery()->execute();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * @param  mixed  $query
-     * @return self
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-        return $this;
+        return $query;
     }
 }

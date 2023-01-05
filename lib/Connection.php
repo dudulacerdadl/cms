@@ -46,18 +46,21 @@ class Connection
     ) {
         switch (strtolower($name)) {
             case 'delete':
-                return new \Delete(
+                $delete = new \Delete();
+                return $delete->execute(
                     $params['table'],
                     $params['id'],
                 );
             case 'insert':
-                return new \Insert(
+                $insert = new \Insert();
+                return $insert->execute(
                     $params['table'],
                     $params['params'],
                     $params['values'],
                 );
             case 'select':
-                return new \Select(
+                $select = new \Select();
+                return $select->execute(
                     $params['table'],
                     $params['params'],
                     $params['where'],
@@ -65,7 +68,8 @@ class Connection
                     $params['whereValues']
                 );
             case 'update':
-                return new \Update(
+                $update = new \Update();
+                return $update->execute(
                     $params['table'],
                     $params['id'],
                     $params['params'],

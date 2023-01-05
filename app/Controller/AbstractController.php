@@ -9,20 +9,14 @@ require_once ROOT . '/lib/Connection.php';
 abstract class AbstractController
 {
     /**
-     * @var \PDO
+     * @var mixed
      */
-    protected $conn;
-
-    /**
-     * @var \PDO
-     */
-    protected $connSqlite;
+    protected $connection;
 
     public function __construct()
     {
         $conn = new \Connection();
-        $this->setConn($conn->Conn());
-        $this->setConnSqlite($conn->ConnSqlite());
+        $this->setConnection($conn);
     }
 
     /**
@@ -41,38 +35,20 @@ abstract class AbstractController
     }
 
     /**
-     * @return \PDO
+     * @return mixed
      */
-    public function getConn()
+    public function getConnection()
     {
-        return $this->conn;
+        return $this->connection;
     }
 
     /**
-     * @param  \PDO   $conn
+     * @param  $connection
      * @return self
      */
-    public function setConn($conn)
+    public function setConnection($connection)
     {
-        $this->conn = $conn;
-        return $this;
-    }
-
-    /**
-     * @return \PDO
-     */
-    public function getConnSqlite()
-    {
-        return $this->connSqlite;
-    }
-
-    /**
-     * @param  \PDO   $connSqlite
-     * @return self
-     */
-    public function setConnSqlite($connSqlite)
-    {
-        $this->connSqlite = $connSqlite;
+        $this->connection = $connection;
         return $this;
     }
 }

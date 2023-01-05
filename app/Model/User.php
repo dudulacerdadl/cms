@@ -20,16 +20,12 @@ class User
     private $password;
 
     /**
-     * @var \PDO
+     * @var mixed
      */
     private $conn;
 
     /**
-     * @var \PDO
-     */
-    private $connSqlite;
-
-    /**
+     * @param $conn
      * @param $button
      * @param $email
      * @param $password
@@ -37,14 +33,12 @@ class User
      */
     public function __construct(
         $conn,
-        $connSqlite,
         $button,
         $email,
         $password,
         $name = null
     ) {
-        $this->conn       = $conn;
-        $this->connSqlite = $connSqlite;
+        $this->conn = $conn;
 
         switch ($button) {
             case 'Entrar':
@@ -82,8 +76,17 @@ class User
             header("Location: /admin/signin");
         }
 
-        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
-        $result->execute();
+        $result = $this->conn->operation(
+            'select',
+            [
+                'table'       => 'users',
+                'params'      => ['id', 'email', 'name', 'password'],
+                'where'       => true,
+                'whereParams' => 'email',
+                'whereValues' => $this->getEmail(),
+            ]
+        );
+
         $results = $result->fetch();
 
         if ($results['password'] != $this->getPassword()) {
@@ -117,8 +120,16 @@ class User
             header("Location: /admin/signup");
         }
 
-        $email = $this->conn->prepare("SELECT `email` FROM `users` WHERE email = '" . $this->getEmail() . "'");
-        $email->execute();
+        $email = $this->conn->operation(
+            'select',
+            [
+                'table'       => 'users',
+                'params'      => ['email'],
+                'where'       => true,
+                'whereParams' => 'email',
+                'whereValues' => $this->getEmail(),
+            ]
+        );
 
         if (isset($email->fetch()['email'])) {
             $_SESSION['msg'] = 'E-mail já registrado';
@@ -126,26 +137,26 @@ class User
             exit;
         }
 
-        $query = "INSERT INTO `users` (`name`, `email`, `password`, `created_at`, `updated_at`) "
-            . "VALUES (:name, :email, :password, :created_at, :updated_at);";
+        $this->conn->operation(
+            'insert',
+            [
+                'table'  => 'users',
+                'params' => ['name', 'email', 'password', 'created_at', 'updated_at'],
+                'values' => [$this->getName(), $this->getEmail(), $this->getPassword(), date("Y-m-d H:i:s"), date("Y-m-d H:i:s")],
+            ]
+        );
 
-        $sql = [
-            'sqlite' => $this->connSqlite->prepare($query),
-            'mysql'  => $this->conn->prepare($query),
-        ];
+        $result = $this->conn->operation(
+            'select',
+            [
+                'table'       => 'users',
+                'params'      => ['id', 'email', 'name', 'password'],
+                'where'       => true,
+                'whereParams' => 'email',
+                'whereValues' => $this->getEmail(),
+            ]
+        );
 
-        foreach ($sql as $data) {
-            $data->execute([
-                ':name'       => $this->getName(),
-                ':email'      => $this->getEmail(),
-                ':password'   => $this->getPassword(),
-                ':created_at' => date("Y-m-d H:i:s"),
-                ':updated_at' => date("Y-m-d H:i:s"),
-            ]);
-        }
-
-        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE email = '" . $this->getEmail() . "'");
-        $result->execute();
         $results = $result->fetch();
 
         $_SESSION['id']       = $results['id'];
@@ -174,30 +185,27 @@ class User
             header("Location: /admin/signup");
         }
 
-        $query = "UPDATE `users` SET "
-            . "`name` = :name, "
-            . "`email` = :email, "
-            . "`password` = :password, "
-            . "`updated_at` = :updated_at "
-            . "WHERE `id` = :id;";
+        $this->conn->operation(
+            'update',
+            [
+                'table'  => 'users',
+                'id'     => $_SESSION['id'],
+                'params' => ['name', 'email', 'password', 'updated_at'],
+                'values' => [$this->getName(), $this->getEmail(), $this->getPassword(), date("Y-m-d H:i:s")],
+            ]
+        );
 
-        $sql = [
-            'sqlite' => $this->connSqlite->prepare($query),
-            'mysql'  => $this->conn->prepare($query),
-        ];
+        $result = $this->conn->operation(
+            'select',
+            [
+                'table'       => 'users',
+                'params'      => ['id', 'email', 'name', 'password'],
+                'where'       => true,
+                'whereParams' => 'id',
+                'whereValues' => $_SESSION['id'],
+            ]
+        );
 
-        foreach ($sql as $data) {
-            $data->execute([
-                ':name'       => $this->getName(),
-                ':email'      => $this->getEmail(),
-                ':password'   => $this->getPassword(),
-                ':updated_at' => date("Y-m-d H:i:s"),
-                ':id'         => $_SESSION['id'],
-            ]);
-        }
-
-        $result = $this->conn->prepare("SELECT `id`, `email`, `name`, `password` FROM `users` WHERE id = '" . $_SESSION['id'] . "'");
-        $result->execute();
         $results = $result->fetch();
 
         $_SESSION['id']       = $results['id'];
@@ -209,18 +217,13 @@ class User
 
     protected function deleteProcess()
     {
-        $query = "DELETE FROM `users` WHERE `id` = :id;";
-
-        $sql = [
-            'sqlite' => $this->connSqlite->prepare($query),
-            'mysql'  => $this->conn->prepare($query),
-        ];
-
-        foreach ($sql as $data) {
-            $data->execute([
-                ':id' => $_SESSION['id'],
-            ]);
-        }
+        $this->conn->operation(
+            'delete',
+            [
+                'table' => 'users',
+                'id'    => $_SESSION['id'],
+            ]
+        );
 
         unset(
             $_SESSION['id'],

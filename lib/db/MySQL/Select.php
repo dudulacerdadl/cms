@@ -3,19 +3,14 @@
 class Select extends Connection
 {
     /**
-     * @var mixed
-     */
-    private $query;
-
-    /**
      * @param $table
      * @param array $params
      * @param $where
-     * @param array $whereParams
-     * @param array $whereValues
-     * @return null
+     * @param null $whereParam
+     * @param null $whereValue
+     * @return mixed
      */
-    public function __construct(
+    public function execute(
         $table,
         array $params,
         $where = null,
@@ -35,35 +30,12 @@ class Select extends Connection
         }
 
         if ($where && $whereParam && $whereValue) {
-            $queryString .= " WHERE $whereParam = $whereValue";
+            $queryString .= " WHERE `$whereParam` = '$whereValue'";
         }
 
-        $this->setQuery(self::Conn()->prepare($queryString));
-    }
+        $query = self::Conn()->prepare($queryString);
+        $query->execute();
 
-    /**
-     * @return mixed
-     */
-    public function execute()
-    {
-        return $this->getQuery()->execute();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * @param  mixed  $query
-     * @return self
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-        return $this;
+        return $query;
     }
 }
