@@ -10,15 +10,19 @@ require_once ROOT . '/vendor/autoload.php';
 
 $route = new \Cms\Model\Route();
 
-$route->add('/', \Cms\Controller\FrontendController::class, 'index');
-$route->add('/admin/home', \Cms\Controller\BackendController::class, 'profile');
-$route->add('/admin/signin', \Cms\Controller\BackendController::class, 'signin');
-$route->add('/admin/signup', \Cms\Controller\BackendController::class, 'signup');
-$route->add('/admin/signout', \Cms\Controller\BackendController::class, 'signout');
-$route->add('/admin/edit', \Cms\Controller\BackendController::class, 'edit');
-$route->add('/admin/sign/exec', \Cms\Controller\BackendController::class, 'exec');
-$route->add('/news', \Cms\Controller\NewsController::class, 'open');
-$route->add('/news/new', \Cms\Controller\NewsController::class, 'new');
-$route->add('/news/edit', \Cms\Controller\NewsController::class, 'edit');
-$route->add('/news/edit/exec', \Cms\Controller\NewsController::class, 'exec');
+$frontendController = new \Cms\Controller\FrontendController;
+$backendController = new \Cms\Controller\BackendController;
+$newsController = new \Cms\Controller\NewsController;
+
+$route->add('/', $frontendController, 'index');
+$route->add('/admin/home', $backendController, 'profile');
+$route->add('/admin/signin', $backendController, 'signin');
+$route->add('/admin/signup', $backendController, 'signup');
+$route->add('/admin/signout', $backendController, 'signout');
+$route->add('/admin/edit', $backendController, 'edit');
+$route->add('/admin/sign/exec', $backendController, 'exec');
+$route->add('/news', $newsController, 'open');
+$route->add('/news/new', $newsController, 'new');
+$route->add('/news/edit', $newsController, 'edit');
+$route->add('/news/edit/exec', $newsController, 'exec');
 $route->submit();

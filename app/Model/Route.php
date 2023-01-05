@@ -4,21 +4,36 @@ namespace Cms\Model;
 
 class Route
 {
+    /**
+     * @var array
+     */
     private $_uri = [];
+
+    /**
+     * @var array
+     */
     private $_controller = [];
+
+    /**
+     * @var array
+     */
     private $_method = [];
 
     /**
-     * @param mixed $uri
-     * @return void
+     * @param string                             $uri
+     * @param \Cms\Controller\AbstractController $controller
+     * @param string                             $method
      */
-    public function add($uri, $controller = null, $method = null)
-    {
+    public function add(
+        $uri,
+        \Cms\Controller\AbstractController $controller,
+        $method = null
+    ) {
         $this->_uri[] = '/' . trim($uri, '/');
 
         if ($method != null) {
             $this->_controller[] = $controller;
-            $this->_method[] = $method . 'Action';
+            $this->_method[]     = $method . 'Action';
         }
     }
 
@@ -28,15 +43,9 @@ class Route
 
         foreach ($this->_uri as $key => $value) {
             if (preg_match("#^$value$#", $uriGetParams)) {
-                if (is_string($this->_controller[$key])) {
-                    $useMethod = $this->_controller[$key];
-                    $class = new $useMethod();
-                    $method = $this->_method[$key];
-                    $class->$method();
-                    continue;
-                }
-
-                call_user_func($this->_controller[$key]);
+                $class = $this->_controller[$key];
+                $method    = $this->_method[$key];
+                $class->$method();
             }
         }
     }
