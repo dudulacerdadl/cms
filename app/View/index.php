@@ -1,6 +1,6 @@
 <body>
     <main>
-        <?foreach ($this->getNotices() as $row): ?>
+        <?foreach ($params['news'] as $row): ?>
         <form action="/news" class="cart-form" method="post">
         <input type="hidden" name="title" value="<?echo $row['title'] ?>">
         <input type="hidden" name="author" value="<?echo $row['author'] ?>">
